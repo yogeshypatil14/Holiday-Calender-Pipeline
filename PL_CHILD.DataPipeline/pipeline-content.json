@@ -1,0 +1,73 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "ForEach_Emp",
+        "type": "ForEach",
+        "dependsOn": [],
+        "typeProperties": {
+          "items": {
+            "value": "@json('[\n  {\"empid\":1,\"name\":\"Shivam\"},\n  {\"empid\":2,\"name\":\"Rahul\"},\n  {\"empid\":3,\"name\":\"Amit\"}\n]')",
+            "type": "Expression"
+          },
+          "isSequential": true,
+          "activities": [
+            {
+              "name": "set_status",
+              "type": "SetVariable",
+              "dependsOn": [],
+              "policy": {
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "variableName": "msg",
+                "value": "success"
+              }
+            },
+            {
+              "name": "get_status",
+              "type": "SetVariable",
+              "dependsOn": [
+                {
+                  "activity": "set_status",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ],
+              "policy": {
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "variableName": "result",
+                "value": {
+                  "value": "@concat('pipeline execution is ',variables('msg'))",
+                  "type": "Expression"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "parameters": {
+      "department": {
+        "type": "string"
+      },
+      "employees": {
+        "type": "array"
+      }
+    },
+    "variables": {
+      "msg": {
+        "type": "String",
+        "defaultValue": "hello "
+      },
+      "result": {
+        "type": "String"
+      }
+    }
+  }
+}
